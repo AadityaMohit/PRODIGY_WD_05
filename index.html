@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <div class="weather">
+            <div class="location">
+                <h2>Location</h2>
+                <input type="text" id="search" placeholder="Enter City Name">
+                <button id="searchBtn">Search</button>
+            </div>
+            <div class="current-weather">
+                <h2>Current Weather</h2>
+                <div class="weather-info">
+                    <div class="icon"></div>
+                    <div class="details">
+                        <p class="temp"></p>
+                        <p class="condition"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f8ff; /* Sky blue */
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+    
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        text-align: center;
+    }
+    
+    .weather {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .location {
+        margin-bottom: 20px;
+    }
+    
+    #search {
+        padding: 8px;
+        width: 200px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+    
+    #searchBtn {
+        padding: 8px 20px;
+        background-color: #6a5acd; /* Slate blue */
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+    
+    .current-weather {
+        margin-top: 20px;
+    }
+    
+    .weather-info {
+        display: flex;
+        justify-content: center;
+    }
+    
+    .icon {
+        width: 100px;
+        height: 100px;
+        background-color: #6a5acd; /* Slate blue */
+        border-radius: 50%;
+        margin-right: 20px;
+    }
+    
+    .details {
+        text-align: left;
+    }
+    
+    .temp {
+        font-size: 24px;
+        font-weight: bold;
+    }
+    
+    .condition {
+        font-size: 16px;
+    }
+    
+</style>
+    <script>const searchInput = document.getElementById('search');
+        const searchBtn = document.getElementById('searchBtn');
+        const weatherIcon = document.querySelector('.icon');
+        const tempElement = document.querySelector('.temp');
+        const conditionElement = document.querySelector('.condition');
+        
+        searchBtn.addEventListener('click', () => {
+            const location = searchInput.value;
+            fetchWeather(location);
+        });
+        
+        function fetchWeather(location) {
+            const apiKey = 'a0f8d0f1f96b6fd8074ee4af91184470';        
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=${apiKey}&units=metric`;
+        
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    const { main, weather } = data;
+                    const iconId = weather[0].icon;
+                    const iconUrl = `http://openweathermap.org/img/wn/${iconId}.png`;
+        
+                    weatherIcon.style.backgroundImage = `url(${iconUrl})`;
+                    tempElement.textContent = `${main.temp}°C`;
+                    conditionElement.textContent = weather[0].description;
+                })
+                .catch(error => {
+                    console.error('Error fetching weather data:', error);
+                });
+        }
+        
+        </script>
+</body>
+</html>
